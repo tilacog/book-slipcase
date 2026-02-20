@@ -1,5 +1,5 @@
 use whiskers::prelude::{
-    Color, Draw, Transforms, Widget,
+    Color, Draw, Transforms, Unit, Widget,
     serde::{Deserialize, Serialize},
 };
 
@@ -15,20 +15,23 @@ impl Default for Book {
         Self {
             thickness: 50.0,
             width: 160.0,
-            height: 270.0,
+            height: 210.0,
         }
     }
 }
 
 impl Book {
-    pub(crate) fn upate(
+    pub(crate) fn update(
         &self,
         sketch: &mut whiskers::Sketch,
         _ctx: &mut whiskers::Context<'_>,
     ) -> anyhow::Result<()> {
-        sketch.color(Color::DARK_RED).stroke_width(3.0);
+        let page_w = sketch.width() / Unit::Mm.to_px::<f64>();
+        let page_h = sketch.height() / Unit::Mm.to_px::<f64>();
+
+        sketch.color(Color::DARK_RED).stroke_width(0.5);
         sketch
-            .translate(sketch.width() / 2.0, sketch.height() / 2.0)
+            .translate(page_w / 2.0, page_h / 2.0)
             .rect(0., 0., self.width, self.height);
 
         Ok(())

@@ -17,7 +17,8 @@ impl Default for BookSlipcaseSketch {
 
 impl App for BookSlipcaseSketch {
     fn update(&mut self, sketch: &mut Sketch, ctx: &mut Context) -> anyhow::Result<()> {
-        self.book.upate(sketch, ctx)?;
+        sketch.scale(Unit::Mm);
+        self.book.update(sketch, ctx)?;
         Ok(())
     }
 }
