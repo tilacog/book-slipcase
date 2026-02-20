@@ -97,13 +97,8 @@ impl Book {
             );
         };
 
-        sketch.rotate(f64::consts::FRAC_PI_2); // rotate 90 deg
-        draw_side_flap(sketch);
-
-        sketch.rotate(f64::consts::PI); // rotate 180 deg
-        draw_side_flap(sketch);
-
-        sketch.rotate(f64::consts::FRAC_PI_2); // rotate 90 deg, restore original rotation
+        with_rotation(sketch, f64::consts::FRAC_PI_2, draw_side_flap);
+        with_rotation(sketch, -f64::consts::FRAC_PI_2, draw_side_flap);
     }
 }
 
@@ -120,6 +115,12 @@ fn page_center(sketch: &Sketch) -> (f64, f64) {
 fn translate_to_page_center(sketch: &mut Sketch) {
     let (dx, dy) = page_center(sketch);
     sketch.translate(dx, dy);
+}
+
+fn with_rotation(sketch: &mut Sketch, angle: f64, f: impl FnOnce(&mut Sketch)) {
+    sketch.rotate(angle);
+    f(sketch);
+    sketch.rotate(-angle);
 }
 
 fn trapezoid(sketch: &mut Sketch, x: f64, y: f64, top_w: f64, bottom_w: f64, h: f64) {
