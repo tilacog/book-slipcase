@@ -37,7 +37,7 @@ impl Book {
         self.draw_book_side(sketch);
         self.draw_spine_flaps(sketch);
         self.draw_top_flaps(sketch);
-        // TODO: draw_side_flaps()
+        self.draw_side_flaps(sketch);
 
         Ok(())
     }
@@ -64,6 +64,12 @@ impl Book {
         for (x_center_point, y_center_point) in [(x, y), (-x, y), (x, -y), (-x, -y)] {
             sketch.rect(x_center_point, y_center_point, self.width, self.thickness);
         }
+    }
+
+    fn draw_side_flaps(&self, sketch: &mut Sketch) {
+        let side_center_point = self.thickness.half() + self.width * 1.5;
+        sketch.rect(side_center_point, 0., self.width, self.height);
+        sketch.rect(-side_center_point, 0., self.width, self.height);
     }
 }
 
