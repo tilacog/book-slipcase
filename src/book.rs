@@ -1,3 +1,5 @@
+use core::f64;
+
 use whiskers::{
     Sketch,
     prelude::{
@@ -38,14 +40,6 @@ impl Book {
         self.draw_spine_flaps(sketch);
         self.draw_top_flaps(sketch);
         self.draw_side_flaps(sketch);
-        trapezoid(
-            sketch,
-            0.0,
-            0.0,
-            self.thickness,
-            self.thickness * 2.0,
-            self.thickness,
-        );
 
         Ok(())
     }
@@ -76,8 +70,28 @@ impl Book {
 
     fn draw_side_flaps(&self, sketch: &mut Sketch) {
         let side_center_point = self.thickness.half() + self.width * 1.5;
-        sketch.rect(side_center_point, 0., self.width, self.height);
-        sketch.rect(-side_center_point, 0., self.width, self.height);
+
+        sketch.rotate(f64::consts::FRAC_PI_2); // rotate 90 deg
+        trapezoid(
+            sketch,
+            0.0,
+            -side_center_point,
+            self.height * 0.85,
+            self.height,
+            self.width,
+        );
+
+        sketch.rotate(f64::consts::PI); // rotate 180 deg
+        trapezoid(
+            sketch,
+            0.0,
+            -side_center_point,
+            self.height * 0.85,
+            self.height,
+            self.width,
+        );
+
+        sketch.rotate(f64::consts::FRAC_PI_2); // rotate 90 deg, restore original rotation
     }
 }
 
