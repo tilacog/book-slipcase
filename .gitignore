@@ -1,1 +1,4 @@
 /target
+web/book_slipcase.js
+web/book_slipcase_bg.wasm
+web/book_slipcase_bg.wasm.d.ts
