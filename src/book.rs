@@ -28,37 +28,37 @@ impl Book {
     pub(crate) fn update(
         &self,
         sketch: &mut Sketch,
-        ctx: &mut whiskers::Context<'_>,
+        _ctx: &mut whiskers::Context<'_>,
     ) -> anyhow::Result<()> {
         sketch.color(Color::DARK_RED).stroke_width(2.5);
 
         translate_to_page_center(sketch);
-        self.draw_book_spine(sketch, ctx);
-        self.draw_book_side(sketch, ctx);
-        self.draw_spine_flaps(sketch, ctx);
-        self.draw_top_flaps(sketch, ctx);
+        self.draw_book_spine(sketch);
+        self.draw_book_side(sketch);
+        self.draw_spine_flaps(sketch);
+        self.draw_top_flaps(sketch);
         // TODO: draw_side_flaps()
 
         Ok(())
     }
 
-    fn draw_book_spine(&self, sketch: &mut Sketch, _ctx: &mut whiskers::Context<'_>) {
+    fn draw_book_spine(&self, sketch: &mut Sketch) {
         sketch.rect(0., 0., self.thickness, self.height);
     }
 
-    fn draw_book_side(&self, sketch: &mut Sketch, _ctx: &mut whiskers::Context<'_>) {
+    fn draw_book_side(&self, sketch: &mut Sketch) {
         let side_center_point = self.thickness.half() + self.width.half();
         sketch.rect(side_center_point, 0., self.width, self.height);
         sketch.rect(-side_center_point, 0., self.width, self.height);
     }
 
-    fn draw_spine_flaps(&self, sketch: &mut Sketch, _ctx: &mut whiskers::Context<'_>) {
+    fn draw_spine_flaps(&self, sketch: &mut Sketch) {
         let flap_center_point = self.height.half() + self.thickness.half();
         sketch.rect(0, flap_center_point, self.thickness, self.thickness);
         sketch.rect(0, -flap_center_point, self.thickness, self.thickness);
     }
 
-    fn draw_top_flaps(&self, sketch: &mut Sketch, _ctx: &mut whiskers::Context<'_>) {
+    fn draw_top_flaps(&self, sketch: &mut Sketch) {
         let x = self.thickness.half() + self.width.half();
         let y = self.thickness.half() + self.height.half();
         for (x_center_point, y_center_point) in [(x, y), (-x, y), (x, -y), (-x, -y)] {
