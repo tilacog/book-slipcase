@@ -58,6 +58,22 @@ impl Book {
         let flap_center_point = self.height.half() + self.thickness.half();
         sketch.rect(0, flap_center_point, self.thickness, self.thickness);
         sketch.rect(0, -flap_center_point, self.thickness, self.thickness);
+        trapezoid(
+            sketch,
+            0.0,
+            flap_center_point,
+            self.thickness,
+            self.thickness * 0.8,
+            self.thickness,
+        );
+        trapezoid(
+            sketch,
+            0.0,
+            -flap_center_point,
+            self.thickness * 0.8,
+            self.thickness,
+            self.thickness,
+        );
     }
 
     fn draw_top_flaps(&self, sketch: &mut Sketch) {
@@ -70,26 +86,22 @@ impl Book {
 
     fn draw_side_flaps(&self, sketch: &mut Sketch) {
         let side_center_point = self.thickness.half() + self.width * 1.5;
+        let draw_side_flap = |sketch: &mut Sketch| {
+            trapezoid(
+                sketch,
+                0.0,
+                -side_center_point,
+                self.height * 0.9,
+                self.height,
+                self.width,
+            );
+        };
 
         sketch.rotate(f64::consts::FRAC_PI_2); // rotate 90 deg
-        trapezoid(
-            sketch,
-            0.0,
-            -side_center_point,
-            self.height * 0.85,
-            self.height,
-            self.width,
-        );
+        draw_side_flap(sketch);
 
         sketch.rotate(f64::consts::PI); // rotate 180 deg
-        trapezoid(
-            sketch,
-            0.0,
-            -side_center_point,
-            self.height * 0.85,
-            self.height,
-            self.width,
-        );
+        draw_side_flap(sketch);
 
         sketch.rotate(f64::consts::FRAC_PI_2); // rotate 90 deg, restore original rotation
     }
