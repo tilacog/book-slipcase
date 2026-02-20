@@ -38,6 +38,14 @@ impl Book {
         self.draw_spine_flaps(sketch);
         self.draw_top_flaps(sketch);
         self.draw_side_flaps(sketch);
+        trapezoid(
+            sketch,
+            0.0,
+            0.0,
+            self.thickness,
+            self.thickness * 2.0,
+            self.thickness,
+        );
 
         Ok(())
     }
@@ -86,6 +94,20 @@ fn page_center(sketch: &Sketch) -> (f64, f64) {
 fn translate_to_page_center(sketch: &mut Sketch) {
     let (dx, dy) = page_center(sketch);
     sketch.translate(dx, dy);
+}
+
+fn trapezoid(sketch: &mut Sketch, x: f64, y: f64, top_w: f64, bottom_w: f64, h: f64) {
+    let top_y = y - h.half();
+    let bottom_y = y + h.half();
+    sketch.polyline(
+        [
+            (x - top_w.half(), top_y),
+            (x + top_w.half(), top_y),
+            (x + bottom_w.half(), bottom_y),
+            (x - bottom_w.half(), bottom_y),
+        ],
+        true,
+    );
 }
 
 trait Half {
