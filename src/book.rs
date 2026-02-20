@@ -85,15 +85,18 @@ impl Book {
     }
 
     fn draw_side_flaps(&self, sketch: &mut Sketch) {
-        let side_center_point = self.thickness.half() + self.width * 1.5;
+        let flap_width = self.width * 0.85;
+        let side_panel_outer_edge = self.thickness.half() + self.width;
+        let flap_center = side_panel_outer_edge + flap_width.half();
+        let tapered_height = self.height * 0.9;
         let draw_side_flap = |sketch: &mut Sketch| {
             trapezoid(
                 sketch,
                 0.0,
-                -side_center_point,
-                self.height * 0.9,
+                -flap_center,
+                tapered_height,
                 self.height,
-                self.width,
+                flap_width,
             );
         };
 
