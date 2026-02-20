@@ -35,8 +35,8 @@ impl Book {
         translate_to_page_center(sketch);
         self.draw_book_spine(sketch, ctx);
         self.draw_book_side(sketch, ctx);
+        self.draw_spine_flaps(sketch, ctx);
 
-        // TODO: draw_spine_flaps()
         // TODO: draw_top_flaps()
         // TODO: draw_side_flaps()
 
@@ -48,9 +48,15 @@ impl Book {
     }
 
     fn draw_book_side(&self, sketch: &mut Sketch, _ctx: &mut whiskers::Context<'_>) {
-        let side_center_point = (self.thickness / 2.0) + (self.width / 2.0);
+        let side_center_point = self.thickness.half() + self.width.half();
         sketch.rect(side_center_point, 0., self.width, self.height);
         sketch.rect(-side_center_point, 0., self.width, self.height);
+    }
+
+    fn draw_spine_flaps(&self, sketch: &mut Sketch, _ctx: &mut whiskers::Context<'_>) {
+        let flap_center_point = self.height.half() + self.thickness.half();
+        sketch.rect(0, flap_center_point, self.thickness, self.thickness);
+        sketch.rect(0, -flap_center_point, self.thickness, self.thickness);
     }
 }
 
@@ -62,9 +68,18 @@ fn page_size(sketch: &Sketch) -> (f64, f64) {
 
 fn page_center(sketch: &Sketch) -> (f64, f64) {
     let (page_w, page_h) = page_size(sketch);
-    (page_w / 2.0, page_h / 2.0)
+    (page_w.half(), page_h.half())
 }
 fn translate_to_page_center(sketch: &mut Sketch) {
     let (dx, dy) = page_center(sketch);
     sketch.translate(dx, dy);
+}
+
+trait Half {
+    fn half(&self) -> Self;
+}
+impl Half for f64 {
+    fn half(&self) -> f64 {
+        self / 2.0
+    }
 }
